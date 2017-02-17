@@ -164,7 +164,6 @@ def main():
                    Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
 
     print(DESCRIPTION)
-
     for agentUT in test_agents:
         print("")
         print("*************************")
@@ -177,12 +176,11 @@ def main():
         print("\n\nResults:")
         print("----------")
         print("{!s:<15}{:>10.2f}%".format(agentUT.name, win_ratio))
-
-    win_ratio = play_round([ab_agents[2]] + test_agents, 25)
-
+    win_ratio = play_round(test_agents, 10)
     print("\n\nResults:")
     print("----------")
     print("{!s:<15}{:>10.2f}%".format(test_agents[1].name, win_ratio))
+
 
 if __name__ == "__main__":
     main()

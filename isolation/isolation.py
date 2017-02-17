@@ -44,7 +44,6 @@ class Board(object):
     def __init__(self, player_1, player_2, width=7, height=7):
         self.width = width
         self.height = height
-        self.size = width * height
         self.move_count = 0
         self.__player_1__ = player_1
         self.__player_2__ = player_2

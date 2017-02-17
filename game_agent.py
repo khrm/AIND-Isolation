@@ -43,17 +43,27 @@ def custom_score(game, player):
     if game.is_winner(player):
         return float("inf")
 
-    return heuristic_rollling_weighted_score(game, player)
+    return heuristic_move_weight(game, player)
 
 def heuristic_weighted_score(game, player):
     own_moves = len(game.get_legal_moves(player))
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
     return float(  100 * own_moves - 79 * opp_moves)
 
+def heuristic_weighted_score_div(game, player):
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return (own_moves + game.move_count)/( game.height * game.width + opp_moves)
+
+def heuristic_move_weight(game, player):
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return own_moves - opp_moves * game.move_count
+
 def heuristic_rollling_weighted_score(game, player):
     own_moves = len(game.get_legal_moves(player))
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
-    return float(  (game.size / game.move_count) * own_moves - game.width * opp_moves)
+    return  own_moves -  (  game.move_count / game.height ) * opp_moves
 
 #def heuristic_moves_remaining(game, player):
 
@@ -197,12 +207,6 @@ class CustomPlayer:
 
         tuple(int, int)
             The best move for the current branch; (-1, -1) for no legal moves
-
-        Notes
-        -----
-            (1) You MUST use the `self.score()` method for board evaluation
-                to pass the project unit tests; you cannot call any other
-                evaluation function directly.
         """
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
@@ -255,12 +259,6 @@ class CustomPlayer:
 
         tuple(int, int)
             The best move for the current branch; (-1, -1) for no legal moves
-
-        Notes
-        -----
-            (1) You MUST use the `self.score()` method for board evaluation
-                to pass the project unit tests; you cannot call any other
-                evaluation function directly.
         """
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
@@ -276,28 +274,33 @@ class CustomPlayer:
 
         if depth == 0:
             return self.score(game, self), (-1, -1)
-        score = float("-inf")
+        best_score = float("-inf")
         best_move = (-1, -1)
         for move in game.get_legal_moves(self):
-            cur_score, mv = self.min_value(game.forecast_move(move), depth - 1, alpha, beta)
-            score, best_move = max((score,best_move),(cur_score,move))
-            if score >= beta:
-                return score, best_move
-            alpha = max(alpha, score)
-        return score, best_move
+            cur_score, _ = self.min_value(game.forecast_move(move), depth - 1, alpha, beta)
+            if cur_score > best_score:
+                best_score, best_move = cur_score, move
+                if alpha < best_score:
+                    alpha = best_score
+            if best_score >= beta:
+                return best_score, best_move
+        return best_score, best_move
 
     def min_value(self, game, depth, alpha, beta):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
 
         if depth == 0:
-               return self.score(game, self), (-1, -1)
-        score = float("inf")
+            return self.score(game, self), (-1, -1)
+        best_score = float("inf")
         best_move = (-1, -1)
         for move in game.get_legal_moves(game.get_opponent(self)):
-            cur_score, mv = self.max_value(game.forecast_move(move), depth - 1, alpha, beta)
-            score, best_move = min((score,best_move),(cur_score,move))
-            if score <= alpha:
-                return score, best_move
-            beta = min(beta, score)
-        return score, best_move
+            cur_score, _ = self.max_value(game.forecast_move(move), depth - 1, alpha, beta)
+            if cur_score < best_score:
+                best_score, best_move = cur_score, move
+                if beta > best_score:
+                    beta = best_score
+            best_score, best_move = min((best_score,best_move),(cur_score,move))
+            if best_score <= alpha:
+                return best_score, best_move
+        return best_score, best_move
