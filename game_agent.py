@@ -43,7 +43,7 @@ def custom_score(game, player):
     if game.is_winner(player):
         return float("inf")
 
-    return heuristic_move_weight(game, player)
+    return heuristic_weighted_score_div(game, player)
 
 def heuristic_weighted_score(game, player):
     own_moves = len(game.get_legal_moves(player))
