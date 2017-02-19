@@ -18,10 +18,10 @@ agentB at (1, 3) as player 2 then play to conclusion; the agents swap
 initiative in the second match with agentB at (5, 2) as player 1 and agentA at
 (1, 3) as player 2.
 """
-
 import itertools
 import random
 import warnings
+from functools import partial
 
 from collections import namedtuple
 
@@ -32,8 +32,9 @@ from sample_players import open_move_score
 from sample_players import improved_score
 from game_agent import CustomPlayer
 from game_agent import custom_score
+import game_agent
 
-NUM_MATCHES = 5  # number of matches against each opponent
+NUM_MATCHES = 10  # number of matches against each opponent
 TIME_LIMIT = 150  # number of milliseconds before timeout
 
 TIMEOUT_WARNING = "One or more agents lost a match this round due to " + \
@@ -161,7 +162,12 @@ def main():
     # relative to the performance of the ID_Improved agent to account for
     # faster or slower computers.
     test_agents = [Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved"),
-                   Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
+                   Agent(CustomPlayer(score_fn=partial(custom_score,heuristic=game_agent.heuristic_weighted_score), **CUSTOM_ARGS), "Student I"),
+                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_ratio_rem__score), **CUSTOM_ARGS), "Student II"),
+                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_weighted_score_div), **CUSTOM_ARGS), "Student III"),
+                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_complex_score1), **CUSTOM_ARGS), "Student IV"),
+                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_complex_score3), **CUSTOM_ARGS), "Student V"),
+                   Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student VI")]
 
     print(DESCRIPTION)
     for agentUT in test_agents:
@@ -170,16 +176,12 @@ def main():
         print("{:^25}".format("Evaluating: " + agentUT.name))
         print("*************************")
 
-        agents = random_agents + mm_agents + ab_agents + [agentUT]
+        agents = random_agents + mm_agents + ab_agents + [Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved II")] + [agentUT]
         win_ratio = play_round(agents, NUM_MATCHES)
 
         print("\n\nResults:")
         print("----------")
         print("{!s:<15}{:>10.2f}%".format(agentUT.name, win_ratio))
-    win_ratio = play_round(test_agents, 10)
-    print("\n\nResults:")
-    print("----------")
-    print("{!s:<15}{:>10.2f}%".format(test_agents[1].name, win_ratio))
 
 
 if __name__ == "__main__":
