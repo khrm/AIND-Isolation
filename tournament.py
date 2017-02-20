@@ -165,7 +165,7 @@ def main():
                    Agent(CustomPlayer(score_fn=partial(custom_score,heuristic=game_agent.heuristic_weighted_score), **CUSTOM_ARGS), "Student I"),
                    Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_ratio_rem__score), **CUSTOM_ARGS), "Student II"),
                    Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_weighted_score_div), **CUSTOM_ARGS), "Student III"),
-                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_complex_score1), **CUSTOM_ARGS), "Student IV"),
+                   Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_complex_score), **CUSTOM_ARGS), "Student IV"),
                    Agent(CustomPlayer(score_fn=partial(custom_score, heuristic=game_agent.heuristic_complex_score3), **CUSTOM_ARGS), "Student V"),
                    Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student VI")]
 

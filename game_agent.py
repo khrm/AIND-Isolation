@@ -188,7 +188,7 @@ def heuristic_complex_score3(game, player):
     else:
         return own_moves - opp_moves ** ((game.move_count * 2) / size)
 
-def custom_score(game, player, heuristic = heuristic_complex_score):
+def custom_score(game, player, heuristic = heuristic_complex_score1):
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
