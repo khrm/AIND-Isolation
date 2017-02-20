@@ -1,0 +1,27 @@
+The heuristic gave following results:
+
+| Heuristics  | ID_Improved | Weighted | Ratio Rem | Weighted Div | Complex | Complex1 | Complex 3 |
+|-------------+-------------+----------+-----------+--------------+---------+----------+-----------|
+| Random      |        100% |      90% |       80% |          95% |     95% |     100% |      100% |
+| MM_Null     |         85% |      90% |       90% |          95% |     75% |      95% |      100% |
+| MM_Open     |         65% |      80% |       70% |          80% |     95% |      85% |       75% |
+| MM_Improved |         80% |      70% |       65% |          80% |     85% |      80% |       80% |
+| AB_Null     |         90% |      75% |       90% |         100% |     90% |     100% |       85% |
+| AB_Open     |         80% |      70% |       60% |          80% |     80% |      70% |       75% |
+| AB_Improved |         50% |      50% |       40% |          75% |     65% |      75% |       70% |
+| ID_Improved |         50% |      45% |       30% |          60% |     60% |      70% |       60% |
+| Total       |         75% |   71.25% |     65.62 |       83.12% |  80.62% |   84.38% |    80.62% |
+
+
+Normal weighted score performed nearly equivalent to normal score. When we use ratio remaining for weight, it performed bad.
+
+
+In weighted division, we used division instead of subtraction operator. We decided to take into account normal of moves and size of board. This performed better than simple score.
+
+
+In complex heuristic, we divided our evaluation into three stages:
++ Starting Stage - A normal score.
++ Middle Stage - Complex and Complex3 use 80% of board size as mid stages. Complex 1 uses 70% as end of mid game.We use weighted division in this stage.
++ End Stage - At end game, we have two different heuristic. In one we use previous move of opponents and remaining ratio. In another we use improve score and increase weightage of opp moves. Complex uses latter. Complex1 and Complex3 former.
+
+Complex3 gave us the best results, so we decided to use that. Even head to head with Complex, it performed better.
