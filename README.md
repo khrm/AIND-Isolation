@@ -1,6 +1,10 @@
 
 # Build a Game-playing Agent
 
+## Ranking of Heuristic by Myself(KHRM) till Feb 20 2017 (1st and 2nd Batch)
+
+Joint 1st (./ScreenShotRankingOfHeuristic.png)
+
 ## Synopsis
 
 In this project, students will develop an adversarial search agent to play the game "Isolation".  Students only need to modify code in the `game_agent.py`, however, code is included for example player and evaluation functions for you to review and test against in the other files.
